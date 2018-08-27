@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) throws DataFormatException, IOException {
 		Movie m = new Movie();
 		
-		m.decodeFromFile(new File("mp.swf"));
+		m.decodeFromFile(new File("lol.swf"));
 		
 		for (MovieTag mt : m.getObjects()) {
             if (mt instanceof DoAction) {
@@ -31,5 +31,4 @@ public class Main {
             }
         }
 	}
-
 }
