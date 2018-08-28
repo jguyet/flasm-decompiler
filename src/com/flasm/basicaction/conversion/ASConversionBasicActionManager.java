@@ -101,8 +101,8 @@ public class ASConversionBasicActionManager {
 		Object index = flasm.stack.get(flasm.stack.size() - 1);
 		flasm.stack.remove(flasm.stack.size() - 1);
 		
-		flasm.as += flasm.currentVar.toString() + "[" + index + "]" + " = " + value + System.lineSeparator();
-		System.out.println(flasm.currentVar.toString() + "[" + index + "]" + " = " + value);
+		flasm.as += flasm.currentVar.toString() + "[" + index + "]" + " = " + value + ";" + System.lineSeparator();
+		System.out.println(flasm.currentVar.toString() + "[" + index + "]" + " = " + value + ";");
 		return null;
 	}
 	
