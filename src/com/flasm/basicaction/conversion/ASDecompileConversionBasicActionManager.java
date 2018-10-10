@@ -10,7 +10,7 @@ import com.flasm.FlasmConversion;
 import com.flasm.Flasm.asClass;
 import com.flasm.basicaction.FlasmBasicAction;
 
-public class ASConversionBasicActionManager {
+public class ASDecompileConversionBasicActionManager {
 
 	@FlasmBasicAction(value = BasicAction.SET_VARIABLE, conversion = FlasmConversion.AS)
 	public static String setVariable(Flasm flasm) {
@@ -22,8 +22,11 @@ public class ASConversionBasicActionManager {
 		if (s2 instanceof String) {
 			s2 = "\"" + ((String)s2).replace("'", "\\'") + "\"";
 		}
-		System.out.println(s1.toString() + " = " + s2.toString() + ";");
-		flasm.as += s1.toString() + " = " + s2.toString() + ";" + System.lineSeparator();
+		flasm.getBuilder().append(s1.toString())
+			.append(" = ")
+			.append(s2.toString())
+			.append(";")
+			.append(System.lineSeparator());
 		return null;
 	}
 	
@@ -56,13 +59,13 @@ public class ASConversionBasicActionManager {
 		flasm.stack.remove(flasm.stack.size() - 1);
 		ArrayList<Object> array = new ArrayList<Object>();
 		
-		for (;size > 0; size--) {
+		while (size > 0) {
 			Object s1 = flasm.stack.get(flasm.stack.size() - 1);
 			flasm.stack.remove(flasm.stack.size() - 1);
 			array.add(s1);
+			size--;
 		}
 		flasm.stack.add(array);
-		//System.out.println("NEW_ARRAY :" + array.toString());
 		return null;
 	}
 	
@@ -71,15 +74,15 @@ public class ASConversionBasicActionManager {
 		int size = (int)flasm.stack.get(flasm.stack.size() - 1);
 		flasm.stack.remove(flasm.stack.size() - 1);
 		JSONObject obj = new JSONObject();
-		for (;size > 0; size--) {
+		while (size > 0) {
 			Object s2 = flasm.stack.get(flasm.stack.size() - 1);
 			flasm.stack.remove(flasm.stack.size() - 1);
 			Object s1 = flasm.stack.get(flasm.stack.size() - 1);
 			flasm.stack.remove(flasm.stack.size() - 1);
 			obj.put((String)s1, s2);
+			size--;
 		}
 		flasm.stack.add(obj);
-		//System.out.println("NEW_OBJECT :" + result);
 		return null;
 	}
 	
@@ -89,7 +92,6 @@ public class ASConversionBasicActionManager {
 		flasm.stack.remove(flasm.stack.size() - 1);
 		
 		flasm.stack.add(flasm.currentVar.toString() + "." + value.toString());
-		//System.out.println(this.currentVar.toString() + "." + value);
 		return null;
 	}
 	
@@ -101,8 +103,12 @@ public class ASConversionBasicActionManager {
 		Object index = flasm.stack.get(flasm.stack.size() - 1);
 		flasm.stack.remove(flasm.stack.size() - 1);
 		
-		flasm.as += flasm.currentVar.toString() + "[" + index + "]" + " = " + value + ";" + System.lineSeparator();
-		System.out.println(flasm.currentVar.toString() + "[" + index + "]" + " = " + value + ";");
+		flasm.getBuilder().append(flasm.currentVar.toString())
+		.append("[").append(index).append("]")
+		.append(" = ")
+		.append(value)
+		.append(";")
+		.append(System.lineSeparator());
 		return null;
 	}
 	
@@ -116,18 +122,21 @@ public class ASConversionBasicActionManager {
 		flasm.stack.remove(flasm.stack.size() - 1);
 		
 		String args = "";
-		
-		for (int i = 0; i < sizeArgs; i++) {
+		int i = 0;
+		while (i < sizeArgs) {
 			Object arg = flasm.stack.get(flasm.stack.size() - 1);
 			flasm.stack.remove(flasm.stack.size() - 1);
 			if (!args.isEmpty()) {
 				args += ", ";
 			}
 			args += arg.toString();
+			i++;
 		}
 		flasm.stack.add(value.toString() + "." + method.toString() + "(" + args + ");");
-		flasm.as += value.toString() + "." + method.toString() + "(" + args + ");" + System.lineSeparator();
-		System.out.println(value.toString() + "." + method.toString() + "(" + args + ");");
+		flasm.getBuilder().append(value.toString())
+		.append(".")
+		.append(method.toString()).append("(").append(args).append(");")
+		.append(System.lineSeparator());
 		return null;
 	}
 	

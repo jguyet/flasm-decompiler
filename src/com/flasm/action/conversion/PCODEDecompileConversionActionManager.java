@@ -7,13 +7,13 @@ import com.flagstone.transform.action.TableIndex;
 import com.flasm.Flasm;
 import com.flasm.FlasmConversion;
 import com.flasm.action.FlasmAction;
-import com.flasm.basicaction.FlasmBasicActionFactory;
+import com.flasm.basicaction.FlasmDecompileBasicActionFactory;
 
-public class PCODEConversionActionManager {
+public class PCODEDecompileConversionActionManager {
 
 	@FlasmAction(value = "BasicAction", conversion = FlasmConversion.PCODE)
 	public static String basicActionHandler(BasicAction action, Flasm flasm) {
-		return FlasmBasicActionFactory.executeBasicActionManager(action, flasm);
+		return FlasmDecompileBasicActionFactory.executeBasicActionManager(action, flasm);
 	}
 	
 	@FlasmAction(value = "Push", conversion = FlasmConversion.PCODE)
@@ -40,7 +40,7 @@ public class PCODEConversionActionManager {
 			}
 			pcode += value;
 		}
-		flasm.pcode += pcode + System.lineSeparator();
+		flasm.getBuilder().append(pcode).append(System.lineSeparator());
 		return null;
 	}
 	
@@ -56,7 +56,7 @@ public class PCODEConversionActionManager {
 			}
 			t += "\"" + v + "\"";
 		}
-		flasm.pcode += t + System.lineSeparator();
+		flasm.getBuilder().append(t).append(System.lineSeparator());
 		return null;
 	}
 	

@@ -9,10 +9,10 @@ import java.util.Map;
 import com.flagstone.transform.action.BasicAction;
 import com.flasm.Flasm;
 import com.flasm.FlasmConversion;
-import com.flasm.basicaction.conversion.ASConversionBasicActionManager;
-import com.flasm.basicaction.conversion.PCODEConversionBasicActionManager;
+import com.flasm.basicaction.conversion.ASDecompileConversionBasicActionManager;
+import com.flasm.basicaction.conversion.PCODEDecompileConversionBasicActionManager;
 
-public class FlasmBasicActionFactory {
+public class FlasmDecompileBasicActionFactory {
 
 	public static Map<BasicAction, Method> ASbasicactionHandler = new HashMap<BasicAction, Method>();
 	public static Map<BasicAction, Method> PCODEbacisactionHandler = new HashMap<BasicAction, Method>();
@@ -23,8 +23,8 @@ public class FlasmBasicActionFactory {
 	 */
 	static//load once
 	{
-		Method[] allASMethod = ASConversionBasicActionManager.class.getDeclaredMethods();
-		Method[] allFLASMMethod = PCODEConversionBasicActionManager.class.getDeclaredMethods();
+		Method[] allASMethod = ASDecompileConversionBasicActionManager.class.getDeclaredMethods();
+		Method[] allFLASMMethod = PCODEDecompileConversionBasicActionManager.class.getDeclaredMethods();
 		
 		for (Method m : allASMethod)
 		{

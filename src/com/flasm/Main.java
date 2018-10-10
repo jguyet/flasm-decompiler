@@ -2,22 +2,53 @@ package com.flasm;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.zip.DataFormatException;
 
+import com.flagstone.transform.Background;
 import com.flagstone.transform.DoABC;
 import com.flagstone.transform.DoAction;
 import com.flagstone.transform.Movie;
 import com.flagstone.transform.MovieAttributes;
+import com.flagstone.transform.MovieHeader;
 import com.flagstone.transform.MovieTag;
+import com.flagstone.transform.datatype.Bounds;
+import com.flagstone.transform.datatype.Color;
 
 public class Main {
 
-	public static void main(String[] args) throws DataFormatException, IOException {
+	public static void main(String[] args) throws DataFormatException, IOException, URISyntaxException {
+		compile();
+//		decompile();
+	}
+	
+	public static void compile() throws URISyntaxException, DataFormatException, IOException {
+		Flasm stack = new Flasm();
+		
+		stack.compile(FlasmConversion.AS, getContent());
+	}
+	
+	public static String getContent() throws DataFormatException, IOException {
 		Movie m = new Movie();
 		
-		m.decodeFromFile(new File("DofusInvoker.swf"));
+		m.decodeFromFile(new File("items_fr_432.swf"));
+		
+		Flasm stack = new Flasm();
+    	
+		System.out.println("START DEC");
+		long start = System.currentTimeMillis();
+    	stack.decompile(FlasmConversion.AS, m.getObject(DoAction.class));
+    	System.out.println("Finish : " + (System.currentTimeMillis() - start));
+    	return (stack.as);
+	}
+	
+	public static void decompile() throws DataFormatException, IOException {
+		
+		Movie m = new Movie();
+		
+		m.decodeFromFile(new File("12270_0909301141X.swf"));
 		
 		DoAction d = null;
 		String s = "";
@@ -26,25 +57,17 @@ public class Main {
             if (mt instanceof DoAction) {
             	d = ((DoAction)mt);
             	break ;
-            } else if (mt instanceof MovieAttributes) {
-            	//DoABC tmp = ((DoABC)mt);
-            	
-            	//DoAction d = new DoAction(tmp);
-            	//tmp.
-            	System.out.println(mt.getClass().getName() + " " + mt.toString());
-			} else {
+            } else {
             	s += mt.getClass().getName() + " " + mt.toString() + System.lineSeparator();
-            	//System.out.println(mt.getClass().getName() + " " + mt.toString());
             }
         }
 		
 		Files.write(Paths.get("./content.txt"), s.getBytes());
 		
 		if (d != null) {
-			Flasm stack = new Flasm(d);
+			Flasm stack = new Flasm();
         	
-        	//stack.parse(FlasmConversion.PCODE);
-        	stack.parse(FlasmConversion.AS);
+        	stack.decompile(FlasmConversion.AS, d);
         	
         	Files.write(Paths.get("./as.txt"), stack.as.getBytes());
         	Files.write(Paths.get("./flasm.txt"), stack.pcode.getBytes());

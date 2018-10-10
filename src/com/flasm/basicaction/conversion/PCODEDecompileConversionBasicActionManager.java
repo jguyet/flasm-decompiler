@@ -8,53 +8,53 @@ import com.flasm.FlasmConversion;
 import com.flasm.Flasm.asClass;
 import com.flasm.basicaction.FlasmBasicAction;
 
-public class PCODEConversionBasicActionManager {
+public class PCODEDecompileConversionBasicActionManager {
 
 	@FlasmBasicAction(value = BasicAction.SET_VARIABLE, conversion = FlasmConversion.PCODE)
 	public static String setVariable(Flasm flasm) {
-		flasm.pcode += "SetVariable" + System.lineSeparator();
+		flasm.getBuilder().append("SetVariable").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.GET_VARIABLE, conversion = FlasmConversion.PCODE)
 	public static String getVariable(Flasm flasm) {
-		flasm.pcode += "GetVariable" + System.lineSeparator();
+		flasm.getBuilder().append("GetVariable").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.GET_ATTRIBUTE, conversion = FlasmConversion.AS)
 	public static String getAttribute(Flasm flasm) {
-		flasm.pcode += "GetMember" + System.lineSeparator();
+		flasm.getBuilder().append("GetMember").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.SET_ATTRIBUTE, conversion = FlasmConversion.AS)
 	public static String setAttribute(Flasm flasm) {
-		flasm.pcode += "SetMember" + System.lineSeparator();
+		flasm.getBuilder().append("SetMember").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.POP, conversion = FlasmConversion.PCODE)
 	public static String pop(Flasm flasm) {
-		flasm.pcode += "Pop" + System.lineSeparator();
+		flasm.getBuilder().append("Pop").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.NEW_ARRAY, conversion = FlasmConversion.PCODE)
 	public static String newArray(Flasm flasm) {
-		flasm.pcode += "InitArray" + System.lineSeparator();
+		flasm.getBuilder().append("InitArray").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.NEW_OBJECT, conversion = FlasmConversion.PCODE)
 	public static String newObject(Flasm flasm) {
-		flasm.pcode += "InitObject" + System.lineSeparator();
+		flasm.getBuilder().append("InitObject").append(System.lineSeparator());
 		return null;
 	}
 	
 	@FlasmBasicAction(value = BasicAction.NAMED_OBJECT, conversion = FlasmConversion.AS)
 	public static String namedObject(Flasm flasm) {
-		flasm.pcode += "NewObject" + System.lineSeparator();
+		flasm.getBuilder().append("NewObject").append(System.lineSeparator());
 		return null;
 	}
 	

@@ -9,13 +9,13 @@ import com.flagstone.transform.action.TableIndex;
 import com.flasm.Flasm;
 import com.flasm.FlasmConversion;
 import com.flasm.action.FlasmAction;
-import com.flasm.basicaction.FlasmBasicActionFactory;
+import com.flasm.basicaction.FlasmDecompileBasicActionFactory;
 
-public class ASConversionActionManager {
+public class ASDecompileConversionActionManager {
 
 	@FlasmAction(value = "BasicAction", conversion = FlasmConversion.AS)
 	public static String basicActionHandler(BasicAction action, Flasm flasm) {
-		return FlasmBasicActionFactory.executeBasicActionManager(action, flasm);
+		return FlasmDecompileBasicActionFactory.executeBasicActionManager(action, flasm);
 	}
 	
 	@FlasmAction(value = "Push", conversion = FlasmConversion.AS)

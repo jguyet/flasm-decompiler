@@ -8,12 +8,11 @@ import java.util.Map;
 import com.flagstone.transform.action.Action;
 import com.flasm.Flasm;
 import com.flasm.FlasmConversion;
-import com.flasm.action.conversion.ASConversionActionManager;
-import com.flasm.action.conversion.PCODEConversionActionManager;
+import com.flasm.action.conversion.ASCompileConversionActionManager;
+import com.flasm.action.conversion.PCODECompileConversionActionManager;
 
-public class FlasmActionFactory {
-	
-	
+public class FlasmCompileActionFactory {
+
 	public static Map<String, Method> ASactionHandler = new HashMap<String, Method>();
 	public static Map<String, Method> PCODEactionHandler = new HashMap<String, Method>();
 	public static Map<FlasmConversion, Map<String, Method>> actionHandler = new HashMap<FlasmConversion, Map<String, Method>>();
@@ -23,8 +22,8 @@ public class FlasmActionFactory {
 	 */
 	static//load once
 	{
-		Method[] allASmethods = ASConversionActionManager.class.getDeclaredMethods();
-		Method[] allFLASMmethods = PCODEConversionActionManager.class.getDeclaredMethods();
+		Method[] allASmethods = ASCompileConversionActionManager.class.getDeclaredMethods();
+		Method[] allFLASMmethods = PCODECompileConversionActionManager.class.getDeclaredMethods();
 		
 		for (Method m : allASmethods)
 		{
