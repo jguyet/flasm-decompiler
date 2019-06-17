@@ -2,8 +2,10 @@ package com.flasm;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -14,7 +16,9 @@ import com.flagstone.transform.MovieHeader;
 import com.flagstone.transform.MovieTag;
 import com.flagstone.transform.action.Action;
 import com.flagstone.transform.action.Table;
+import com.flasm.action.FlasmCompileActionFactory;
 import com.flasm.action.FlasmDecompileActionFactory;
+import com.google.common.collect.Lists;
 
 public class Flasm {
 	public FlasmConversion conversion;
@@ -51,6 +55,16 @@ public class Flasm {
     			break ;
     	}
 	}
+
+    private String writeResourceToFile(String resourceName) throws IOException {
+        ClassLoader loader = getClass().getClassLoader();
+        InputStream configStream = loader.getResourceAsStream(resourceName);
+        File tmpFile = new File("./.tmp");
+        
+        tmpFile.createNewFile();
+        Files.copy(configStream, tmpFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        return tmpFile.getAbsolutePath();
+    }
 	
 	
 	public void compile(FlasmConversion conversion, String swfContent) throws URISyntaxException, DataFormatException, IOException {
@@ -58,9 +72,11 @@ public class Flasm {
 		
 		Movie movie = new Movie();
 		
-		URL blankResource = Flasm.class.getResource("/com/resource/blank/blank.swf");
+		//URL blankResource = Flasm.class.getClassLoader().getResource("blank.swf");
 		
-		movie.decodeFromFile(new File(blankResource.getFile()));
+		//System.out.println(blankResource);
+		
+		movie.decodeFromFile(new File(writeResourceToFile("com/resource/blank/blank.swf")));
 		
 		MovieHeader header = movie.getObject(MovieHeader.class);
 		
@@ -68,80 +84,13 @@ public class Flasm {
 		
 		Table table = action.getAction(Table.class);
 		
-//		table.getValues().clear();
-		
-		String content = "";
-		StringBuilder b = new StringBuilder();
-		boolean word = false;
-		System.out.println("START");
-		for (int i = 0; i < swfContent.length(); i++) {
-			if (swfContent.charAt(i) == '"') {
-				if (i > 0 && swfContent.charAt(i - 1) == '\\') {
-					
-				} else {
-					word = !word;
-				}
-			}
-			if (!word && i > 3 && swfContent.charAt(i) == ' '
-					&& swfContent.charAt(i - 3) == 'n'
-					&& swfContent.charAt(i - 2) == 'e'
-					&& swfContent.charAt(i - 1) == 'w') {
-				b.append(swfContent.charAt(i));
-				continue ;
-			}
-			if (!word && (swfContent.charAt(i) == ' '
-					|| swfContent.charAt(i) == '\t'
-					|| swfContent.charAt(i) == '\f'
-					|| swfContent.charAt(i) == '\n'
-					|| swfContent.charAt(i) == '\r'))
-				continue ;
-			b.append(swfContent.charAt(i));
+		//TODO: Writing swfContent to blank.swf
+		for (String line : swfContent.split("\n")) {
+			System.out.println(line);
+			//FlasmCompileActionFactory.executeActionManager(line, this);
 		}
-		System.out.println("FINISH");
-		
-		String[] parsable = b.toString().split(";");
-		int o = 0;
-		for (String s : parsable) {
-			if (o >= 100) {
-				break ;
-			}
-			int parenthese = 0;
-			word = false;
-			List<String> lst = new ArrayList<String>();
-			StringBuilder currentword = new StringBuilder();
-			for (int i = 0; i < s.length(); i++) {
-				if (swfContent.charAt(i) == '"') {
-					if (i > 0 && swfContent.charAt(i - 1) == '\\') {
-						
-					} else {
-						word = !word;
-					}
-				}
-				if (!word && s.charAt(i) == '(') {
-					parenthese++;
-				}
-				if (!word && s.charAt(i) == ')') {
-					parenthese--;
-				}
-				if (word || parenthese > 0) {
-					currentword.append(s.charAt(i));
-					continue ;
-				}
-				if (s.charAt(i) == '.') {
-					lst.add(currentword.toString());
-					currentword = new StringBuilder();
-					continue ;
-				}
-				currentword.append(s.charAt(i));
-			}
-			lst.add(currentword.toString());
-			
-			System.out.println(lst.toString());
-			o++;
-		}
-		
-//		action.clearActions();
-//		action.add(table);
+		action.clearActions();
+		action.add(table);
 		
 		for (MovieTag mt : movie.getObjects()) {
             System.out.println(mt.getClass().getName() + " " + mt.toString());

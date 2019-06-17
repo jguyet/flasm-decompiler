@@ -21,7 +21,7 @@ public class Main {
 
 	public static void main(String[] args) throws DataFormatException, IOException, URISyntaxException {
 		compile();
-//		decompile();
+		decompile();
 	}
 	
 	public static void compile() throws URISyntaxException, DataFormatException, IOException {
@@ -37,10 +37,10 @@ public class Main {
 		
 		Flasm stack = new Flasm();
     	
-		System.out.println("START DEC");
+		System.out.println("START DEC  :");
 		long start = System.currentTimeMillis();
     	stack.decompile(FlasmConversion.AS, m.getObject(DoAction.class));
-    	System.out.println("Finish : " + (System.currentTimeMillis() - start));
+    	System.out.println("FINISH DEC : " + (System.currentTimeMillis() - start) + " MS");
     	return (stack.as);
 	}
 	
@@ -48,7 +48,7 @@ public class Main {
 		
 		Movie m = new Movie();
 		
-		m.decodeFromFile(new File("12270_0909301141X.swf"));
+		m.decodeFromFile(new File("items_fr_432.swf"));
 		
 		DoAction d = null;
 		String s = "";
@@ -72,7 +72,7 @@ public class Main {
         	Files.write(Paths.get("./as.txt"), stack.as.getBytes());
         	Files.write(Paths.get("./flasm.txt"), stack.pcode.getBytes());
 		} else {
-			System.out.println("DoAction dosen't exists");
+			System.out.println("DoAction doesn't exists");
 		}
 	}
 }

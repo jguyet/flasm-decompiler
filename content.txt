@@ -1,3 +1,2 @@
 com.flagstone.transform.MovieHeader Header: { version=6; compressed=true; frameSize=Bounds: (0, 0) (20, 20); frameRate=20.000000; frameCount=1}
-com.flagstone.transform.MovieObject MovieObject: { type=777; data=byte<3> ...}
 com.flagstone.transform.Background Background: { color=Color: { red=0; green=0; blue=0; alpha=255}}
